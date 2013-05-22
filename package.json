@@ -1,0 +1,29 @@
+{
+  "name": "ortoo-analytics",
+  "version": "0.0.1",
+  "description": "Analytics engine",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ortoo/ortoo-analytics.git"
+  },
+  "keywords": [
+    "analytics"
+  ],
+  "author": "James Sharp",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "gitHead": "bcb675f454d9e0df40fa15b781255367754090c3",
+  "dependencies": {
+    "redis": "~0.8.3",
+    "mongoose": "~3.6.11",
+    "redis-sentinel": "0.0.5",
+    "winston": "~0.7.1"
+  },
+  "devDependencies": {
+    "glob": "~3.2.1"
+  }
+}

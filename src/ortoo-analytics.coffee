@@ -4,6 +4,9 @@ sentinel = require 'redis-sentinel'
 redis = require 'redis'
 mongoose = require 'mongoose'
 winston = require 'winston'
+{Event, conn, mongoose} = models
+
+pendingNewEvents = []
 
 class AnalyticsService
 
@@ -21,8 +24,7 @@ class AnalyticsService
             setInterval @reap.bind(@), @reapInterval
 
     _setupConnections: (opts) ->
-        {Event} = models opts.mongooseConnectionString
-        @Event = Event
+        models.open  opts.mongooseConnectionString
         sentinelEndpoints = opts.redis.sentinelEndpoints
         masterName = opts.redis.sentinelMasterName or 'mymaster'
         redisServerDetails = opts.redis.serverDetails
@@ -56,7 +58,7 @@ class AnalyticsService
 
             # Move the results over to mongodb
             members.forEach (member) =>
-                @Event.create JSON.parse(member), (err) ->
+                Event.create JSON.parse(member), (err) ->
                     if err then return winston.error err.stack, err
 
             # Delete the redis batch
@@ -70,6 +72,21 @@ module.exports.initialize = (opts) ->
     service = new AnalyticsService opts
 
     # Setup our exported properties
-    module.exports.Event = service.Event
     module.exports.newEvent = service.newEvent.bind(service)
+
+    # Flush the pending queue
+    for newEventArgs in pendingNewEvents
+        service.newEvent newEventArgs...
+    pendingNewEvents.length = 0
+
     return service
+
+# Temp buffer for new events until we initialize everything
+module.exports.newEvent = (args...) ->
+    pendingNewEvents.push args
+    return
+
+module.exports.Event = Event
+module.exports.conn = conn
+module.exports.mongoose = mongoose
+

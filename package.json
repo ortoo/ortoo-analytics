@@ -18,12 +18,12 @@
   "readmeFilename": "README.md",
   "gitHead": "bcb675f454d9e0df40fa15b781255367754090c3",
   "dependencies": {
-    "redis": "~0.8.3",
-    "mongoose": "~3.6.11",
-    "redis-sentinel": "0.0.5",
-    "winston": "~0.7.1"
+    "redis": "~2.6.3",
+    "mongoose": "~4.7.1",
+    "redis-sentinel": "0.3.3",
+    "winston": "~2.3.0"
   },
   "devDependencies": {
-    "glob": "~3.2.1"
+    "glob": "~7.1.1"
   }
 }
